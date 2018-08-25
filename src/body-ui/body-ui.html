@@ -1,0 +1,36 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="body-ui">
+  <template>
+
+    <style>
+      :host {
+        display: block;
+      }
+
+    </style>
+    Body 2
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class BodyUi extends Polymer.Element {
+      static get is() { return 'body-ui'; }
+
+      static get properties() {
+        return {
+          comments: {
+            type: Array
+          }
+        };
+      }
+
+    }
+
+    window.customElements.define(BodyUi.is, BodyUi);
+  </script>
+</dom-module>

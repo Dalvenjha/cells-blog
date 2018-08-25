@@ -1,0 +1,39 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<dom-module id="comment-dp">
+  <template>
+      <iron-ajax 
+            id="ajaxComponent" 
+            url="https://jsonplaceholder.typicode.com/posts/{{idpost}}/comments" 
+            handle-as="json" 
+            last-response="{{response}}"
+            last-error="{{error}}">
+      </iron-ajax>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class CommentDp extends Polymer.Element {
+      static get is() { return 'comment-dp'; }
+      static get properties() {
+        return {
+          response:{
+            type:Object,
+            notify:true
+          },
+          idpost:String
+        };
+      }
+      requestToComments(idpost){
+        console.log('requestToComments',idpost);
+        this.idpost=idpost;
+        this.$.ajaxComponent.generateRequest();
+      }
+    }
+
+    window.customElements.define(CommentDp.is, CommentDp);
+  </script>
+</dom-module>

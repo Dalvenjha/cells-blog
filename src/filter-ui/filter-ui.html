@@ -1,0 +1,78 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../dp/photos-dp.html">
+
+<dom-module id="filter-ui">
+  <template>
+
+    <style>
+        :host {
+            display: block;
+        }
+        input[type="button"]{
+            background: #444;
+            border: none;
+            color: #fff;
+            border-radius: 4px;
+            padding: 12px 20px
+        }
+        paper-input{
+            width: 40%;
+            display: inline-block;
+        }
+    </style>
+
+    <paper-input always-float-label label="Buscar" value="{{param}}"></paper-input>
+    <input type="button" value="Agregar" on-click="_search">
+    <br>  
+    <photos-dp id="postId" photos={{photos}}></photos-dp>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class FilterUi extends Polymer.Element {
+      static get is() { return 'filter-ui'; }
+      constructor(){
+        super();
+      }
+
+      ready(){
+          super.ready();
+          if(this.$.postId != undefined && this.$.postId != null){
+            this.doRequest();
+          }
+      }
+
+      doRequest(){
+          this.$.postId.requestToPhotos();
+      }
+      
+      static get properties() {
+        return {
+          photos: {
+            type: Array,
+            notify: true
+          },
+        };
+      }
+
+      _search(){
+        console.log("this.photos.length 1", this.photos.length);  
+        if (this.param == ""){
+            this.doRequest();
+        } else{
+            this.photos = this.photos.filter((item)=>{
+            return item.title.indexOf(this.param) > -1;
+            // return item.id == eval(this.param);
+            });
+        }
+        console.log("this.photos.length 2", this.photos.length);  
+      }
+
+    }
+
+    window.customElements.define(FilterUi.is, FilterUi);
+  </script>
+</dom-module>

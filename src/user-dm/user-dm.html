@@ -1,0 +1,54 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../user-dp/user-dp.html">
+
+<dom-module id="user-dm">
+  <template>
+    <user-dp id="IdUserDp" users="{{users}}" response="{{response}}" ></user-dp>
+  </template>
+
+  <script>
+    class UserDm extends Polymer.Element {
+      static get is() { return 'user-dm'; }
+
+      ready() {
+        super.ready();
+        this.getUsers();
+      }
+
+      getUsers() {
+        console.log('userDM.getUsers');
+        this.$.IdUserDp.getUsersDp();
+      }
+
+      static get properties() {
+        return {
+          users: {
+            type: Array,
+            notify: true
+          },
+          response:{
+            type:Object,
+            observer:'_getResponse'
+          }
+        };
+      }
+
+      _getResponse(){
+        console.log('userDM.getResponse:', this.response);
+        this._formatResponse(this.response);
+      }
+      _formatResponse(response){
+        let resultado=[];
+        let user;
+        response.forEach(element => {
+          user=element;
+          resultado.push(user);
+        });
+        this.set('users',resultado);
+      }
+
+    }
+
+    window.customElements.define(UserDm.is, UserDm);
+  </script>
+</dom-module>

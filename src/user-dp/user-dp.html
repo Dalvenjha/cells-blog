@@ -1,0 +1,41 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<dom-module id="user-dp">
+  <template>
+      <iron-ajax 
+            id="ajaxComponent" 
+            url="https://jsonplaceholder.typicode.com/users" 
+            handle-as="json" 
+            last-response="{{response}}"
+            last-error="{{error}}">
+      </iron-ajax>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class UserDp extends Polymer.Element {
+      static get is() { return 'user-dp'; }
+      static get properties() {
+        return {
+          users: {
+            type: Array,
+            notify: true
+          },
+          response:{
+            type:Object,
+            notify:true
+          }
+        };
+      }
+      getUsersDp(){
+        console.log('UserDp.getUsersDp');
+        this.$.ajaxComponent.generateRequest();
+      }
+    }
+
+    window.customElements.define(UserDp.is, UserDp);
+  </script>
+</dom-module>

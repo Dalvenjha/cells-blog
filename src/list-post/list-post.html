@@ -1,0 +1,230 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+
+
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/social-icons.html">
+
+
+<dom-module id="list-post">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      paper-button {
+        font-family: 'Roboto', 'Noto', sans-serif;
+        font-weight: normal;
+        font-size: 14px;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      paper-button.pink {
+        color: var(--paper-pink-a200);
+        --paper-button-ink-color: var(--paper-pink-a200);
+      }
+
+      paper-button.pink:hover {
+        background-color: var(--paper-pink-100);
+      }
+
+      paper-button.indigo {
+        background-color: var(--paper-indigo-500);
+        color: white;
+        --paper-button-raised-keyboard-focus: {
+          background-color: var(--paper-pink-a200) !important;
+          color: white !important;
+        }
+        ;
+      }
+
+      paper-button.indigo:hover {
+        background-color: var(--paper-indigo-400);
+      }
+
+      paper-button.green {
+        background-color: var(--paper-green-500);
+        color: white;
+      }
+
+      paper-button.green[active] {
+        background-color: var(--paper-red-500);
+      }
+
+      paper-button.disabled {
+        color: white;
+      }
+
+
+
+
+      demo-snippet {
+        --demo-snippet-demo: {
+          background: var(--paper-grey-200);
+          padding: 16px;
+        }
+        ;
+        --demo-snippet-code: {
+          max-height: 300px;
+        }
+      }
+
+      .vertical-section-container {
+        max-width: 400px;
+      }
+
+      paper-card {
+        width: 100%;
+        --paper-card-header-color: white;
+        font-family: 'Roboto', 'Noto', sans-serif;
+      }
+
+      .horizontal {
+        @apply --layout-horizontal;
+      }
+
+      .flex {
+        @apply --layout-flex;
+      }
+
+      .justified {
+        @apply --layout-justified;
+      }
+
+      .amber {
+        background: var(--paper-amber-900);
+      }
+
+      .lime {
+        background: var(--paper-lime-500);
+      }
+
+      .cyan {
+        background: var(--paper-cyan-500);
+      }
+
+      .dark {
+        background: var(--paper-blue-grey-500);
+      }
+
+      paper-card.dark,
+      paper-card.amber,
+      paper-card.lime,
+      paper-card.cyan {
+        color: white;
+        --paper-card-header-color: white;
+      }
+
+      paper-checkbox {
+        display: block;
+        margin-bottom: 4px;
+        --paper-checkbox-label-color: white;
+        --paper-checkbox-unchecked-color: white;
+      }
+
+      paper-icon-button {
+        color: var(--paper-grey-600);
+      }
+
+      paper-icon-button.white {
+        color: white !important;
+      }
+
+      .body {
+        color: black;
+      }
+    </style>
+
+    <template id="PostList" is="dom-repeat" items="[[posts]]" as="item">
+      <paper-card heading="[[item.title]]" image="https://www.bbvacontinental.pe/fbin/mult/tarjeta-del-hincha-secundario_tcm1105-718314.png"
+        alt="BBVA Continental" class="white">
+        <div class="card-content body">[[item.body]]</div>
+        <div class="card-actions">
+          <paper-button  on-click="_onSelectClicked">ver comentarios ... </paper-button>
+          <!--
+          <paper-icon-button icon="expand-more" title="more info" on-click="_toggle" style="float:right;">
+          </paper-icon-button>
+          <iron-collapse id="more-info" style="width:100%;">
+            [[item.body]]
+          </iron-collapse>
+          -->
+        </div>
+      </paper-card>
+      <!--
+      <paper-card heading="[[item.title]]" alt="Emmental">
+        <div class="card-content">
+          <div>Phone: <span>[[item.body]]</span></div>
+        </div>
+        <paper-button toggles raised class="indigo" on-click="_onSelectClicked">ver comentarios ... </paper-button>
+      </paper-card>
+      -->
+      <br><br>
+    </template>
+  </template>
+
+  <script>
+    /**
+     * `ejemplo-list`
+     * 
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class ListPost extends Polymer.Element {
+      static get is() { return 'list-post'; }
+      static get properties() {
+        return {
+          posts: {
+            type: Array,
+            value: [],
+            observer: '_updatePostUi'
+          },
+          idpost: {
+            type: String,
+            notify: true
+          }
+        };
+      }
+      _updateIdUser() {
+        console.log('_updatePostUi', this.iduser);
+      }
+
+      _updatePostUi() {
+        console.log('_updatePostUi', this.posts);
+      }
+
+      _onSelectClicked(evt) {
+        console.log("_onSelectClicked", evt.target);
+
+        let index = this.$.PostList.indexForElement(evt.target);
+        console.log("index", index);
+        console.log("index", this.posts[ index ]);
+        console.log('set idPost:' + this.posts[ index ].id);
+        this.idpost = this.posts[ index ].id;
+
+      }
+
+      _getSelectedClass(selected) {
+        console.log('_getSelectedClass');
+        return selected ? 'selected' : '';
+      }
+
+      _toggle(evt) {
+        console.log('_toggle', evt);
+        var moreInfo = document.getElementById('more-info');
+        var iconButton = Polymer.dom(event).localTarget;
+        iconButton.icon = moreInfo.opened ? 'expand-more' : 'expand-less';
+        moreInfo.toggle();
+      }
+    }
+
+    window.customElements.define(ListPost.is, ListPost);
+  </script>
+</dom-module>

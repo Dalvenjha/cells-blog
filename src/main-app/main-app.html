@@ -1,0 +1,135 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../user-dm/user-dm.html">
+<link rel="import" href="../post-dm/post-dm.html">
+<link rel="import" href="../comment-dm/comment-dm.html">
+<link rel="import" href="../../bower_components/simple-grid/simple-grid.html">
+<link rel="import" href="../header-ui/header-ui.html">
+<link rel="import" href="../list-post/list-post.html">
+<link rel="import" href="../body-ui/body-ui.html">
+
+
+<dom-module id="main-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .comment-box{
+        position: relative;
+        width: 90%;
+        min-height: 20px;
+        overflow: hidden;
+        margin: 15px auto;
+        border-bottom: 1px solid rgba(0,0,0,0.07);
+        box-sizing: border-box;
+        padding: 10px;
+        background-color: rgba(0,0,0,0.03);
+        font-family: 'lato';
+        font-size: 14px;
+        color: #6b6b6b;
+      }
+
+      .comment-box h3{
+        text-transform: uppercase;
+        display: inline-block;
+        float: none;
+        clear: both;
+        margin-bottom: 5px;
+      }
+
+      .title{
+        color: #00aeef;
+        text-transform: uppercase;
+      }
+
+      .comment-box h3:after{
+        content: "";
+        display: inline-block;
+        height: 0;
+        width: 33%;
+        border-top: 2px solid #00aeef;
+      }
+
+      .comment-box:first-child{
+        margin-top: 0;
+      }
+    </style>
+    <user-dm users="{{users}}"></user-dm>
+    <post-dm id="idPostDm" posts="{{posts}}"  ></post-dm>
+    <comment-dm id="idCommentDm" comments="{{comments}}"></comment-dm>
+    <simple-grid>
+      <simple-grid-row>
+        <header-ui users={{users}} iduser={{iduser}} ></header-ui>
+      </simple-grid-row>
+      <simple-grid-row>
+        <div class="col-sm-5">
+          <list-post posts="{{posts}}" idpost={{idpost}} ></list-post>
+        </div>
+        <div class="col-sm-7">
+            <template is="dom-repeat" items="{{comments}}">
+              <div class="comment-box">
+                <h3 class="name">{{item.name}}</h3>
+                <p class="title">{{item.email}}</p>
+                <p class="body-text">{{item.body}}</p>
+              </div>
+            </template>
+        </div>
+      </simple-grid-row>
+    </simple-grid>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class MainApp extends Polymer.Element {
+      static get is() { return 'main-app'; }
+      static get properties() {
+        return {
+          posts: {
+            type: Array,
+            observer: '_updatePosts'
+          },
+          comments: {
+            type: Array,
+            observer: '_updateComments'
+          },
+          users: {
+            type: Array,
+            observer: '_updateUsers'
+          },
+          iduser:{
+            type:String,
+            observer:'_updateIdUser'
+          },
+          idpost:{
+            type:String,
+            observer:'_updateIdPost'
+          }
+        };
+      }
+      _updateUsers() {
+        console.log('MAIN._updateUsers', this.users);
+        //this._getPostsOfUser(this.users[ 3 ].id);
+      }
+      _updateIdUser(){
+        console.log('MAIN._updateIdUser',this.iduser);
+        this.$.idPostDm.getPostsOfUser(this.iduser);
+      }
+      _updateIdPost(){
+        this.$.idCommentDm.getCommentsOfPost(this.idpost );
+      }
+
+      _updatePosts() {
+        console.log('MAIN._updatePosts', this.posts);
+
+      }
+      _updateComments() {
+        console.log('MAIN._updateComments', this.comments);
+      }
+    }
+
+    window.customElements.define(MainApp.is, MainApp);
+  </script>
+</dom-module>

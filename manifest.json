@@ -1,0 +1,7 @@
+{
+  "name": "trabajo-blog",
+  "short_name": "trabajo-blog",
+  "description": "App Blogs",
+  "start_url": "/",
+  "display": "standalone"
+}

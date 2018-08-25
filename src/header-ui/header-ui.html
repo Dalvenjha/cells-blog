@@ -1,0 +1,112 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/pt-select/pt-select.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+
+<dom-module id="header-ui">
+  <template>
+
+    <style>
+      :host {
+        display: block;
+      }
+
+      .item {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+      }
+
+      .title{
+        color:blue;
+      }
+
+      paper-button {
+        font-family: 'Roboto', 'Noto', sans-serif;
+        font-weight: normal;
+        font-size: 14px;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      paper-button.pink {
+        color: var(--paper-pink-a200);
+        --paper-button-ink-color: var(--paper-pink-a200);
+      }
+
+      paper-button.pink:hover {
+        background-color: var(--paper-pink-100);
+      }
+
+      paper-button.indigo {
+        background-color: var(--paper-indigo-500);
+        color: white;
+        --paper-button-raised-keyboard-focus: {
+          background-color: var(--paper-pink-a200) !important;
+          color: white !important;
+        }
+        ;
+      }
+
+      paper-button.indigo:hover {
+        background-color: var(--paper-indigo-400);
+      }
+
+      paper-button.green {
+        background-color: var(--paper-green-500);
+        color: white;
+      }
+
+      paper-button.green[active] {
+        background-color: var(--paper-red-500);
+      }
+
+      paper-button.disabled {
+        color: white;
+      } 
+    </style>
+
+    <h3 class="title">Blog BBVA</h3>
+
+    <pt-select id="idUserSelected" options="{{users}}" value="{{selectedValue}}" placeholder="Select One" path-to-value="id"
+      path-to-label="name"></pt-select>
+
+    <br><br>
+    <paper-button toggles raised class="green" on-click="_searchPostofIdUser">Buscar ... </paper-button>
+    <br><br><br>
+    <photos-dp id="postId" photos={{photos}}></photos-dp>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class HeaderUi extends Polymer.Element {
+      static get is() { return 'header-ui'; }
+
+      static get properties() {
+        return {
+          users: {
+            type: Array
+          },
+          iduser: {
+            type: String,
+            notify: true
+          }
+        };
+      }
+
+      _searchPostofIdUser() {
+        console.log('_searchPostofIdUser', this.$.idUserSelected.value);
+        this.iduser = this.$.idUserSelected.value;
+      }
+
+      _updateSelected(evt) {
+        console.log('_updateSelected', this.selectedValue);
+        onsole.log('_updateSelected', evt);
+      }
+
+    }
+
+    window.customElements.define(HeaderUi.is, HeaderUi);
+  </script>
+</dom-module>

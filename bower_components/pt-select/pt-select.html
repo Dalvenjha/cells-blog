@@ -1,0 +1,225 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
+
+<!--
+`<pt-select>` is a single select field.
+    <pt-select options="[[options]]" value="{{currentValue}}"></pt-select>
+-->
+
+<dom-module id="pt-select">
+	<template>
+		<style>
+			:host {
+				min-width: 80px;
+				overflow: hidden;
+			}
+
+			select {
+				color: var(--pt-accent-color);
+				background-color: transparent;
+
+				border: none;
+				border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+				font-size: 16px;
+				text-transform: capitalize;
+				cursor: pointer;
+
+				@apply(--pt-select-style);
+			}
+
+			label {
+				display: block;
+			}
+
+			#message {
+				display: none;
+				visibility: hidden;
+			}
+
+			:host([selected-value='']) select, :host(:not([selected-value])) select {
+				color: var(--pt-primary-text-color, lightslategray);
+			}
+
+			:host([invalid]) select {
+				color: #F44336;
+				border-bottom: 1px solid #F44336;
+			}
+
+			:host([invalid]) #message {
+				display: block;
+				visibility: visible;
+			}
+
+			select:focus {
+				outline: none;
+			}
+		</style>
+
+		<label for="selectElement">[[label]]</label>
+		<select id="selectElement" name="[[name]]" value="[[selectedValue]]" on-change="_valueSelected"
+		        required="[[required]]" multiple="[[multiple]]">
+			<template is="dom-repeat" items="[[_mapItems(options, pathToValue, pathToLabel)]]">
+				<option value="[[item.uid]]">[[item.name]]</option>
+			</template>
+			Î
+		</select>
+
+		<span id="message">[[errorMessage]]</span>
+	</template>
+
+	<script>
+	  /**
+	   * `pt-select`
+	   * Select Polymer Element
+	   *
+	   * @customElement
+	   * @polymer
+	   * @demo demo/index.html
+	   */
+	  class PtSelect extends Polymer.mixinBehaviors([Polymer.IronValidatableBehavior], Polymer.Element) {
+		static get is(){
+		  return 'pt-select';
+		}
+
+		static get properties(){
+		  return {
+			options: Array,
+			label: String,
+			name: String,
+			selectedValue: {
+			  type: String,
+			  reflectToAttribute: true
+			},
+			option: {
+			  type: Object,
+			  notify: true,
+			},
+			placeholder: {
+			  type: String,
+			  observer: '_placeholderChanged'
+			},
+			pathToValue: {
+			  type: String,
+			  value: 'uid'
+			},
+			pathToLabel: {
+			  type: String,
+			  value: 'name'
+			},
+			multiple: {
+			  type: Boolean,
+			  value: false,
+			  reflectToAttribute: true
+			}
+		  };
+		}
+
+		_placeholderChanged(placeholder){
+		  let element = this.shadowRoot.querySelector('.placeholder');
+
+		  if (placeholder) {
+			if (!element) {
+			  element = document.createElement('option');
+			  element.classList.add('placeholder');
+			  element.disabled = true;
+			  element.setAttribute('disabled', 'disabled');
+			  element.value = '';
+			  let parent = this.shadowRoot.querySelector('select');
+			  parent.insertBefore(element, parent.firstElementChild);
+			  parent.value = '';
+			}
+
+			element.innerText = placeholder;
+		  } else {
+			if (element) {
+			  this.shadowRoot.removeChild(element);
+			}
+		  }
+		}
+
+		_valueSelected(e){
+		  this.set('selectedValue', e.target.value);
+		  this.set('option', this._options[this.selectedValue].option);
+		  this.dispatchEvent(new CustomEvent('pt-option-changed', {
+			detail: {
+			  value: this.selectedValue,
+			  option: this.option
+			}
+		  }));
+		}
+
+		_mapItems(options, pathToValue, pathToLabel){
+		  if (options && pathToValue && pathToLabel) {
+			let _options = {};
+			let uid;
+			let result = options.map((option) =>{
+			  uid = this._extractPath(option, pathToValue);
+
+			  return _options[uid] = {
+				uid: uid,
+				name: this._extractPath(option, pathToLabel),
+				option: option
+			  }
+			});
+
+			this._options = _options;
+			return result;
+		  }
+		}
+
+		_extractPath(item, path){
+		  let value = item;
+		  path = path.split('.');
+		  path.forEach((step) =>{
+			value = value[step] || {};
+		  });
+		  return value;
+		}
+
+		get _validator(){
+		  return {
+			validate: (value) =>{
+			  return !this.required || (value && value !== '');
+			}
+		  }
+		}
+
+		get value(){
+		  if (this.multiple) {
+			return this.$.selectElement ? this._toArray(this.$.selectElement.selectedOptions) : [];
+		  }
+		  return this.selectedValue;
+		}
+
+		set value(valueParam){
+		  if (this.multiple) {
+			this._clearSelection();
+			valueParam.forEach((option) =>{
+			  this.shadowRoot.querySelector(`select option[value="${option}"]`).selected = true;
+			});
+		  } else {
+			this.selectedValue = valueParam;
+		  }
+		}
+
+		_toArray(obj){
+		  let array = [];
+		  for (var i = obj.length >>> 0; i--;) {
+			array[i] = obj[i].value;
+		  }
+		  return array;
+		}
+
+		_clearSelection(){
+		  this.shadowRoot.querySelectorAll('select option').forEach((option) =>{
+			option.selected = false;
+		  });
+		}
+
+
+	  }
+
+	  window.customElements.define(PtSelect.is, PtSelect);
+	</script>
+</dom-module>

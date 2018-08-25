@@ -1,0 +1,110 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-element-mixin tests</title>
+
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../vaadin-element-mixin.html">
+  <link rel="import" href="../../polymer/polymer-element.html">
+</head>
+
+<body>
+  <div id="dom-modules">
+    <dom-module id="test-foo">
+      <template>
+        <style>
+          :host {
+            display: block;
+          }
+        </style>
+        <div part="text" id="text">text</div>
+      </template>
+    </dom-module>
+  </div>
+
+  <script>
+  document.addEventListener('WebComponentsReady', function() {
+    class TestFoo extends Vaadin.ElementMixin(Polymer.Element) {
+      static get is() {
+        return 'test-foo';
+      }
+    }
+    customElements.define(TestFoo.is, TestFoo);
+  });
+  </script>
+
+  <test-fixture id="default">
+    <template>
+      <test-foo></test-foo>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('basic functionality', function() {
+
+      beforeEach(() => {
+        fixture('default');
+      });
+
+      it('should define window.Vaadin', function() {
+        expect(window.Vaadin).to.exist;
+      });
+
+      it('should check for development mode', function() {
+        expect(window.Vaadin.developmentMode).to.exist;
+      });
+
+      it('should store the class entry in registrations', function() {
+        expect(window.Vaadin.registrations).to.be.array;
+        expect(window.Vaadin.registrations[0].is).to.equal('test-foo');
+      });
+
+      it('should load usage statistics only on localhost', function() {
+        expect(window.Vaadin.developmentModeCallback).to.exist;
+        expect(window.Vaadin.developmentModeCallback['vaadin-usage-statistics']).to.exist;
+      });
+
+      it('should be possible to exclude development mode detector', function() {
+        const ref = window.Vaadin.developmentModeCallback;
+        window.Vaadin.developmentModeCallback = undefined;
+        class TestBar extends Vaadin.ElementMixin(Polymer.Element) {
+          static get is() {
+            return 'test-bar';
+          }
+        }
+        // Everything is ok as long as defining the TestBar class does not fail
+        expect(TestBar.is).to.equal('test-bar');
+
+        window.Vaadin.developmentModeCallback = ref;
+      });
+
+      it('should load usage statistics once per class', function() {
+        const spy = sinon.spy(window.Vaadin.developmentModeCallback, 'vaadin-usage-statistics');
+
+        class TestBar extends Vaadin.ElementMixin(Polymer.Element) {
+          static get is() {
+            return 'test-bar';
+          }
+        }
+        expect(spy).to.be.calledOnce;
+        customElements.define(TestBar.is, TestBar);
+        expect(spy).to.be.calledOnce;
+        const elem = document.createElement('test-bar');
+        document.body.appendChild(elem);
+        expect(spy).to.be.calledOnce;
+        class TestBar2 extends Vaadin.ElementMixin(Polymer.Element) {
+          static get is() {
+            return 'test-bar2';
+          }
+        }
+        customElements.define(TestBar2.is, TestBar2);
+        expect(spy).to.be.calledTwice;
+      });
+
+
+    });
+  </script>
+</body>

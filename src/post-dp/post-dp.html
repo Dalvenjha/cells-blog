@@ -1,0 +1,35 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<dom-module id="post-dp">
+  <template>
+    <iron-ajax id="ajaxComponent" url="https://jsonplaceholder.typicode.com/posts?userId={{iduser}}" handle-as="json" last-response="{{response}}"
+      last-error="{{error}}">
+    </iron-ajax>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class PostDp extends Polymer.Element {
+      static get is() { return 'post-dp'; }
+      static get properties() {
+        return {
+          iduser: String,
+          response: {
+            type: Object,
+            notify: true
+          }
+        };
+      }
+      getPostsOfUser(iduser) {
+        console.log('UserDp.getPostsOfUser', iduser);
+        this.iduser = iduser;
+        this.$.ajaxComponent.generateRequest();
+      }
+    }
+
+    window.customElements.define(PostDp.is, PostDp);
+  </script>
+</dom-module>

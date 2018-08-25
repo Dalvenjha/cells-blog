@@ -1,0 +1,100 @@
+<dom-module id="dropdown-menu-basic-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Basic Usage</h3>
+    <vaadin-demo-snippet id="dropdown-menu-list-box-basic">
+      <template preserve-content>
+        <vaadin-dropdown-menu>
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Jose</vaadin-item>
+              <vaadin-item>Manolo</vaadin-item>
+              <vaadin-item>Pedro</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Configuring the Dropdown</h3>
+    <vaadin-demo-snippet id="dropdown-menu-list-box-configuring">
+      <template preserve-content>
+        <vaadin-dropdown-menu label="Label" placeholder="Placeholder">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item value="1">Option one</vaadin-item>
+              <vaadin-item value="2">Option two</vaadin-item>
+              <vaadin-item value="3">Option three</vaadin-item>
+              <vaadin-item value="4">Option four</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+
+        <vaadin-dropdown-menu label="Disabled" disabled>
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Option one</vaadin-item>
+              <vaadin-item>Option two</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+
+        <vaadin-dropdown-menu label="Read-only" readonly value="Option one">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Option one</vaadin-item>
+              <vaadin-item>Option two</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+
+        <vaadin-dropdown-menu label="Required" required>
+          <template>
+            <vaadin-list-box>
+              <vaadin-item value="" disabled>Select an option</vaadin-item>
+              <hr>
+              <vaadin-item value="1">Option one</vaadin-item>
+              <vaadin-item value="2">Option two</vaadin-item>
+              <vaadin-item value="3">Option three</vaadin-item>
+              <vaadin-item value="4">Option four</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Customize the Label of Selected Value</h3>
+    <p>
+        By setting the <code>label</code> attribute of inner vaadin-items you will be able to change the visual representation of the selected value in the input part.
+    </p>
+    <vaadin-demo-snippet id="dropdown-menu-list-box-custom-label">
+      <template preserve-content>
+        <vaadin-dropdown-menu placeholder="Language">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item label="">Other</vaadin-item>
+              <vaadin-item label="ES">Spanish</vaadin-item>
+              <vaadin-item label="FI">Finnish</vaadin-item>
+              <vaadin-item label="EN">English</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class DropdownMenuBasicDemos extends DemoReadyEventEmitter(DropdownMenuDemo(Polymer.Element)) {
+      static get is() {
+        return 'dropdown-menu-basic-demos';
+      }
+    }
+    customElements.define(DropdownMenuBasicDemos.is, DropdownMenuBasicDemos);
+  </script>
+</dom-module>

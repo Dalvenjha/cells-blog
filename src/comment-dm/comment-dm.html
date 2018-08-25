@@ -1,0 +1,55 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../comment-dp/comment-dp.html">
+
+<dom-module id="comment-dm">
+  <template>
+    <comment-dp id="idCommentDP" response="{{response}}"></comment-dp>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class CommentDm extends Polymer.Element {
+      static get is() { return 'comment-dm'; }
+
+      getCommentsOfPost(idpost) {
+        console.log('getCommentsOfPost', idpost);
+        this.$.idCommentDP.requestToComments(idpost);
+      }
+
+      static get properties() {
+        return {
+          response:{
+            type:Object,
+            observer: '_updateResponse'
+          },
+          comments: {
+            type: Array,
+            notify: true
+          }
+        };
+      }
+
+      _updateResponse() {
+        console.log('CommentDM._updateResponse', this.response);
+        if(this.response != null && this.response.length >0 )
+          this.set('comments', this._formatResponse(this.response));
+      }
+
+      _formatResponse(response) {
+        let resultado = [];
+        let comment;
+        response.forEach(element => {
+          comment = element;
+          resultado.push(comment);
+        });
+        console.log(resultado.length)
+        return resultado;
+      }
+    }
+
+    window.customElements.define(CommentDm.is, CommentDm);
+  </script>
+</dom-module>

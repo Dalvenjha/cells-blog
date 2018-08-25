@@ -1,0 +1,45 @@
+{
+  "name": "simple-grid",
+  "description": "A simple solution to use Bootstrap grid system in Polymer components. Edit",
+  "authors": [
+    "m-mansoor-ali"
+  ],
+  "main": "simple-grid.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0"
+  },
+  "devDependencies": {
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
+    "polymer": "Polymer/polymer#^2.0.0"
+  },
+  "resolutions": {
+    "polymer": "^2.0.0"
+  },
+  "demos": {
+    "Demo": "build/es5-bundled/demo/index.html"
+  },
+  "keywords": [
+    "web-components",
+    "polymer",
+    "demo",
+    "simple-grid",
+    "bootstrap"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/m-mansoor-ali/simple-grid.git"
+  },
+  "homepage": "https://github.com/m-mansoor-ali/simple-grid",
+  "version": "1.0.2",
+  "_release": "1.0.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.2",
+    "commit": "03728eda3d7619c283408e5e709db7125b705a5f"
+  },
+  "_source": "https://github.com/m-mansoor-ali/simple-grid.git",
+  "_target": "^1.0.2",
+  "_originalSource": "m-mansoor-ali/simple-grid"
+}
